@@ -4,6 +4,23 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Babaclava.Application\Babaclava.Application.csproj" />
+      <ProjectReference Include="..\Babaclava.Core\Babaclava.Core.csproj" />
+      <ProjectReference Include="..\Babaclava.Infrastructure\Babaclava.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\Babaclava.Infrastructure\Seed\*.json">
+            <Link>Seed\%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    
 </Project>
