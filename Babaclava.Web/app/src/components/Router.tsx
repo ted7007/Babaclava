@@ -1,11 +1,12 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import TypeBook from "./screens/type-book/TypeBook";
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<div>home</div>} path="/" />
-        <Route element={<div>not found</div>} path="*" />
+        <Route path="/:id/type" element={<TypeBook />} />
+        <Route path="*" element={<Navigate to="/asdf1234/type" replace />} />
       </Routes>
     </BrowserRouter>
   );
