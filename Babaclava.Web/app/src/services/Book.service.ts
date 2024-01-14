@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from "axios"
-import { IBook } from "../types/Book";
+import { IBook, IPage } from "../types/Book";
 
 export const BookService = {
-  async getPage(bookId: string, countOfSigns: number, pageNumber: number): Promise<IBook[]> {
+  async getPage(bookId: string, pageSize: number, pageNumber: number): Promise<IPage> {
     try {
-      const response: AxiosResponse<IBook[]> = await axios.get(`http://localhost:5145/api/v1/book/${bookId}`, {
+      const response: AxiosResponse<IPage> = await axios.get(`http://localhost:5139/api/v1/book/page`, {
         params: {
           bookId,
-          countOfSigns,
+          pageSize,
           pageNumber
         },
       });
@@ -19,7 +19,7 @@ export const BookService = {
 
   async saveProgress(bookId: string, pageSize: number, pageNumber: number) {
     try {
-      const response: AxiosResponse<IBook[]> = await axios.get(`http://localhost:5145/api/v1/save-progress`, {
+      const response: AxiosResponse<IPage> = await axios.get(`http://localhost:5139/api/v1/save-progress`, {
         params: {
           bookId,
           pageSize,

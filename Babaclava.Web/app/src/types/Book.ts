@@ -7,3 +7,10 @@ export interface IBook {
     pageNumber: number
     totalPages: number
 }
+
+export interface IPage {
+  text: string
+  pageSize: number
+  hasNextPage: boolean
+  hasPreviousPage: boolean
+}
