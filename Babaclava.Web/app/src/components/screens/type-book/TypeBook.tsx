@@ -30,9 +30,14 @@ const TypeBook: React.FC = () => {
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyPress);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      handleKeyPress(event as any);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.removeEventListener("keydown", handleKeyPress);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyPress]);
 
