@@ -14,24 +14,21 @@ public class BookTextManager : IBookTextManager
     {
         _environment = environment;
     }
-    public async Task<Result<BookPageDto>> GetBookTextAsync(string filePath, int startPos, int count, CancellationToken cancellationToken)
+    public async Task<Result<string>> GetBookTextAsync(string filePath, int startPos, int count, CancellationToken cancellationToken)
     {
         try
         {
             var directoryPath = Path.Combine(_environment.ContentRootPath, "Books");
-            using (var reader = (File.OpenRead(Path.Combine(directoryPath, filePath))))
+            using (var reader = new FileStream(Path.Combine(directoryPath, filePath), FileMode.Open, FileAccess.Read))
             {
-                var res = new byte[count];
+                var res = new char[count];
+                string text = "";
                 reader.Seek(startPos, SeekOrigin.Begin);
-                await reader.ReadAsync(res, 0, count, cancellationToken);
-                var pageRes = new BookPageDto
+                using (var sr = new StreamReader(reader, Encoding.UTF8, true))
                 {
-                    Text = Encoding.UTF8.GetString(res),
-                    HasNextPage = reader.Length > startPos + count,
-                    HasPreviousPage = startPos > 0,
-                    PageSize = count
-                };
-                return Result.Ok(pageRes);
+                    await sr.ReadBlockAsync(res, 0, count);
+                    return Result.Ok(new string(res));
+                }
             }
         }
         catch (Exception e)

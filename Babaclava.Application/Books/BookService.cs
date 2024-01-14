@@ -42,12 +42,28 @@ public class BookService : IBookService
             return Result.Fail("Книга не найдена");
         var startPage = pageSize * pageNumber;
 
-        if (startPage > book.Size)
+        if (startPage > book.Size && startPage != 0)
             return Result.Fail("Книга закончилась");
 
         if (startPage + pageSize > book.Size)
-            pageSize = book.Size - startPage;
-        return await _bookTextManager.GetBookTextAsync(book.TextPath, startPage, pageSize, cancellationToken);
+        {
+            if (startPage == 0)
+                pageSize = book.Size;
+            else
+                pageSize = book.Size - startPage;
+        }
+        var textRes = await _bookTextManager.GetBookTextAsync(book.TextPath, startPage, pageSize, cancellationToken);
+        if (textRes.IsFailed)
+            return textRes.ToResult();
+        
+        var pageRes = new BookPageDto
+        {
+            Text = textRes.Value,
+            HasNextPage = book.Size > startPage + pageSize,
+            HasPreviousPage = startPage > 0,
+            PageSize = textRes.Value.Length
+        };
+        return Result.Ok(pageRes);
     }
 
     public async Task<Result> SaveProgressAsync(Guid bookId, int pageSize, int pageNumber, CancellationToken cancellationToken)
