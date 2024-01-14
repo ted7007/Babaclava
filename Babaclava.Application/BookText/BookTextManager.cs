@@ -1,3 +1,4 @@
+using System.Text;
 using Babaclava.Core.Books.Dto;
 using Babaclava.Core.BookText;
 using FluentResults;
@@ -18,16 +19,15 @@ public class BookTextManager : IBookTextManager
         try
         {
             var directoryPath = Path.Combine(_environment.ContentRootPath, "Books");
-            using (var reader = new StreamReader(File.OpenRead(Path.Combine(directoryPath, filePath))))
+            using (var reader = (File.OpenRead(Path.Combine(directoryPath, filePath))))
             {
-                var res = new char[count];
-                var readCount = await reader.ReadBlockAsync(res, startPos, count);
-                if (readCount == 0)
-                    return Result.Fail("Текст книги закончился");
+                var res = new byte[count];
+                reader.Seek(startPos, SeekOrigin.Begin);
+                await reader.ReadAsync(res, 0, count, cancellationToken);
                 var pageRes = new BookPageDto
                 {
-                    Text = new string(res),
-                    HasNextPage = !reader.EndOfStream,
+                    Text = Encoding.UTF8.GetString(res),
+                    HasNextPage = reader.Length > startPos + count,
                     HasPreviousPage = startPos > 0,
                     PageSize = count
                 };
