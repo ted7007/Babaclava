@@ -1,0 +1,30 @@
+/* styles.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.book {
+  background-color: antiquewhite;
+  width: 800px;
+  height: 600px;
+  border-radius: 12px;
+  padding: 36px;
+  font-size: 20px;
+  overflow: hidden;
+}
+
+.textcols {
+  height: 100%;
+  column-width: 45%;
+  column-count: 2;
+  column-gap: 10%;
+  column-rule: 2px solid black;
+  column-fill: auto;
+  text-align: justify;
+}
