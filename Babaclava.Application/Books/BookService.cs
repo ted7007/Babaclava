@@ -27,6 +27,7 @@ public class BookService : IBookService
             BookId = b.Book.Id,
             Title = b.Book.Title,
             Author = b.Book.Author,
+            ImageUrl = b.Book.ImageUrl,
             PageSize = pageSize,
             PageNumber = b.UserResult is null ? 0 : (int)(b.UserResult.CurrentPosition / pageSize),
             TotalPages = (int)Math.Round((double)b.Book.Size / pageSize, MidpointRounding.AwayFromZero)
