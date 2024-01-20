@@ -31,5 +31,19 @@ export const BookService = {
     } catch (error) {
       throw error;
     }
+  },
+
+ async getCatalog(count: number) {
+    try {
+      const response: AxiosResponse = await axios.get(`http://localhost:5139/api/v1/catalog`, {
+        params: {
+          count,
+          pageSize: COUNT_OF_SIGNS,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
 };

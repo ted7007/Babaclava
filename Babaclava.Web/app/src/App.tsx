@@ -1,6 +1,15 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import TypeBook from "./components/screens/type-book/TypeBook";
+import { Header } from "./components/Header/Header";
+import { Catalog } from "./components/screens/catalog/Catalog";
 
 const router = createBrowserRouter([
   {
@@ -9,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/catalog",
-    element: <div>catalog</div>,
+    element: <Catalog />,
   },
   {
     path: "/*",
@@ -20,6 +29,7 @@ const router = createBrowserRouter([
 export const App: React.FC = () => {
   return (
     <>
+      <Header />
       <RouterProvider router={router} />
     </>
   );

@@ -1,0 +1,15 @@
+.container {
+  width: max-content;
+}
+
+.container img {
+  height: 150px;
+  width: 100px;
+  border-radius: 7px;
+  padding-bottom: 3px;
+}
+
+.author {
+  font-size: 10px;
+  color: #8c8c8c;
+}
