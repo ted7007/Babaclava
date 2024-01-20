@@ -1,9 +1,8 @@
 export interface IBook {
-    id: string
+    bookId: string
     title: string
     author: string
-    image: string
-    pageSize: string
+    pageSize: number
     pageNumber: number
     totalPages: number
 }
