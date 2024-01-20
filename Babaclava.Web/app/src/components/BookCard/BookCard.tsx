@@ -8,7 +8,7 @@ export const BookCard = ({ book }: { book: IBook }) => {
     <Link to={`/${book.bookId}/type`}>
       <div className={styles.container}>
         <img src={book.imageUrl} alt="" />
-        <p>{book.author}</p>
+        <p>{book.title}</p>
         <p className={styles.author}>{book.author}</p>
       </div>
     </Link>
