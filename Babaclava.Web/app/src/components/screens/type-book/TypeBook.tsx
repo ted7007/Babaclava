@@ -4,7 +4,6 @@ import { BookService } from "../../../services/Book.service";
 import { COUNT_OF_SIGNS } from "../../../constants/book";
 import { IPage } from "../../../types/Book";
 import { Link } from "react-router-dom";
-import ArrowLeftIcon from "../../../assets/arrow-left-2.svg";
 
 const printedTextStyle = {
   color: "rgba(0, 0, 0, 0.2)",
@@ -12,7 +11,6 @@ const printedTextStyle = {
 
 const activeLetterStyle = {
   color: "black",
-
   border: "solid 0.1px",
 };
 
@@ -20,9 +18,8 @@ const TypeBook: React.FC = () => {
   const countOfSigns = COUNT_OF_SIGNS;
 
   const [text, setText] = useState<string | null>(null);
-
   const [bookId, setBookId] = useState<number | null>(null);
-  const [pageNumber, setPageNumber] = useState<number | null>(null);
+  const [pageNumber, setPageNumber] = useState<number>(0); // Изменил на 0, чтобы начать с первой страницы
   const [typedText, setTypedText] = useState<string>("");
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -37,12 +34,24 @@ const TypeBook: React.FC = () => {
     }
   };
 
+  const handleNextPage = () => {
+    setPageNumber(pageNumber + 1);
+    setTypedText("");
+  };
+
+  const handlePrevPage = () => {
+    if (pageNumber > 0) {
+      setPageNumber(pageNumber - 1);
+      setTypedText("");
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response: IPage = await BookService.getPage(
           "dca6f3e2-aa7f-411c-b82f-7b8fbd715f9a",
-          0
+          pageNumber
         );
         const { text } = response;
         setText(text);
@@ -52,11 +61,17 @@ const TypeBook: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [pageNumber]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      handleKeyPress(event as any);
+      if (event.key === "ArrowRight") {
+        handleNextPage();
+      } else if (event.key === "ArrowLeft") {
+        handlePrevPage();
+      } else {
+        handleKeyPress(event as any);
+      }
     };
 
     document.addEventListener("keydown", handleKeyDown);
@@ -64,12 +79,20 @@ const TypeBook: React.FC = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleKeyPress]);
+  }, [handleKeyPress, handleNextPage, handlePrevPage]);
 
   useEffect(() => {
-    if (!text) return;
+    if (!text || !pageNumber) return;
     if (typedText.length === text.length) {
-      BookService.saveProgress("dca6f3e2-aa7f-411c-b82f-7b8fbd715f9a", );
+      BookService.saveProgress(
+        "dca6f3e2-aa7f-411c-b82f-7b8fbd715f9a",
+        pageNumber
+      );
+      // Обновил запрос следующей страницы
+      BookService.getPage(
+        "dca6f3e2-aa7f-411c-b82f-7b8fbd715f9a",
+        pageNumber + 1
+      );
     }
   }, [typedText]);
 
@@ -79,7 +102,7 @@ const TypeBook: React.FC = () => {
         <div className={styles.title}>
           <Link to="/catalog">
             <div
-              sx={{
+              style={{
                 display: "flex",
                 gap: "1.5rem",
                 alignItems: "center",
@@ -110,7 +133,9 @@ const TypeBook: React.FC = () => {
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-white mt-3 ">2/378</h2>
+        <h2 className="text-2xl font-bold text-white mt-3 ">
+          {pageNumber + 1}/{countOfSigns}
+        </h2>
       </div>
     );
 };
