@@ -8,6 +8,8 @@ public class CatalogBookDto
 
     public string Author { get; set; }
 
+    public string ImageUrl { get; set; }
+
     public int PageSize { get; set; }
 
     public int PageNumber { get; set; }
